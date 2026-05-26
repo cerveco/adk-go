@@ -78,7 +78,7 @@ func TestNewRuntimeAPIController_PluginsAssignment(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			controller := NewRuntimeAPIController(nil, nil, nil, nil, 10*time.Second, runner.PluginConfig{
 				Plugins: tt.plugins,
-			}, false)
+			}, false, false)
 
 			if controller == nil {
 				t.Fatal("NewRuntimeAPIController returned nil")
@@ -202,6 +202,7 @@ func TestRunSSEHandler(t *testing.T) {
 				nil,
 				10*time.Second,
 				runner.PluginConfig{},
+				false,
 				false,
 			)
 

@@ -204,6 +204,7 @@ func (s *streamQueryHandler) run(ctx context.Context, req *models.StreamQueryReq
 	}
 
 	return r.Run(ctx, req.Input.UserID, req.Input.SessionID, message, agent.RunConfig{
-		StreamingMode: agent.StreamingModeSSE,
+		StreamingMode:             agent.StreamingModeSSE,
+		SaveInputBlobsAsArtifacts: config.SaveInputBlobsAsArtifacts,
 	}), nil
 }

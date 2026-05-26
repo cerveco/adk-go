@@ -35,18 +35,19 @@ import (
 
 // RuntimeAPIController is the controller for the Runtime API.
 type RuntimeAPIController struct {
-	sseTimeout        time.Duration
-	sessionService    session.Service
-	memoryService     memory.Service
-	artifactService   artifact.Service
-	agentLoader       agent.Loader
-	pluginConfig      runner.PluginConfig
-	autoCreateSession bool
+	sseTimeout                time.Duration
+	sessionService            session.Service
+	memoryService             memory.Service
+	artifactService           artifact.Service
+	agentLoader               agent.Loader
+	pluginConfig              runner.PluginConfig
+	autoCreateSession         bool
+	saveInputBlobsAsArtifacts bool
 }
 
 // NewRuntimeAPIController creates the controller for the Runtime API.
-func NewRuntimeAPIController(sessionService session.Service, memoryService memory.Service, agentLoader agent.Loader, artifactService artifact.Service, sseTimeout time.Duration, pluginConfig runner.PluginConfig, autoCreateSession bool) *RuntimeAPIController {
-	return &RuntimeAPIController{sessionService: sessionService, memoryService: memoryService, agentLoader: agentLoader, artifactService: artifactService, sseTimeout: sseTimeout, pluginConfig: pluginConfig, autoCreateSession: autoCreateSession}
+func NewRuntimeAPIController(sessionService session.Service, memoryService memory.Service, agentLoader agent.Loader, artifactService artifact.Service, sseTimeout time.Duration, pluginConfig runner.PluginConfig, autoCreateSession bool, saveInputBlobsAsArtifacts bool) *RuntimeAPIController {
+	return &RuntimeAPIController{sessionService: sessionService, memoryService: memoryService, agentLoader: agentLoader, artifactService: artifactService, sseTimeout: sseTimeout, pluginConfig: pluginConfig, autoCreateSession: autoCreateSession, saveInputBlobsAsArtifacts: saveInputBlobsAsArtifacts}
 }
 
 // RunAgent executes a non-streaming agent run for a given session and message.
@@ -230,7 +231,8 @@ func (c *RuntimeAPIController) getRunner(req models.RunAgentRequest) (*runner.Ru
 		streamingMode = agent.StreamingModeSSE
 	}
 	return r, &agent.RunConfig{
-		StreamingMode: streamingMode,
+		StreamingMode:             streamingMode,
+		SaveInputBlobsAsArtifacts: c.saveInputBlobsAsArtifacts,
 	}, nil
 }
 

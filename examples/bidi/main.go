@@ -90,7 +90,7 @@ func main() {
 	http.Handle("/", fs)
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	controller := controllers.NewRuntimeAPIController(ss, nil, agent.NewSingleLoader(a), nil, 0, runner.PluginConfig{}, true)
+	controller := controllers.NewRuntimeAPIController(ss, nil, agent.NewSingleLoader(a), nil, 0, runner.PluginConfig{}, true, false)
 
 	http.HandleFunc("/run_live", func(w http.ResponseWriter, req *http.Request) {
 		err := controller.RunLiveHandler(w, req)
