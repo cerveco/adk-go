@@ -56,11 +56,12 @@ type SubLauncher interface {
 
 // Config contains parameters for web & console execution: sessions, artifacts, agents etc
 type Config struct {
-	SessionService   session.Service
-	ArtifactService  artifact.Service
-	MemoryService    memory.Service
-	AgentLoader      agent.Loader
-	A2AOptions       []a2asrv.RequestHandlerOption
-	PluginConfig     runner.PluginConfig
-	TelemetryOptions []telemetry.Option
+	SessionService            session.Service
+	ArtifactService           artifact.Service
+	MemoryService             memory.Service
+	AgentLoader               agent.Loader
+	A2AOptions                []a2asrv.RequestHandlerOption
+	PluginConfig              runner.PluginConfig
+	TelemetryOptions          []telemetry.Option
+	SaveInputBlobsAsArtifacts bool
 }
