@@ -47,7 +47,7 @@ func NewServer(cfg ServerConfig) (*Server, error) {
 	// where the ADK REST API will be served.
 	setupRouter(router,
 		routers.NewSessionsAPIRouter(controllers.NewSessionsAPIController(cfg.SessionService)),
-		routers.NewRuntimeAPIRouter(controllers.NewRuntimeAPIController(cfg.SessionService, cfg.MemoryService, cfg.AgentLoader, cfg.ArtifactService, cfg.SSEWriteTimeout, cfg.PluginConfig, false)),
+		routers.NewRuntimeAPIRouter(controllers.NewRuntimeAPIController(cfg.SessionService, cfg.MemoryService, cfg.AgentLoader, cfg.ArtifactService, cfg.SSEWriteTimeout, cfg.PluginConfig, false, cfg.SaveInputBlobsAsArtifacts)),
 		routers.NewAppsAPIRouter(controllers.NewAppsAPIController(cfg.AgentLoader)),
 		routers.NewDebugAPIRouter(controllers.NewDebugAPIController(cfg.SessionService, cfg.AgentLoader, debugTelemetry)),
 		routers.NewArtifactsAPIRouter(controllers.NewArtifactsAPIController(cfg.ArtifactService)),
@@ -61,13 +61,14 @@ func NewServer(cfg ServerConfig) (*Server, error) {
 
 // ServerConfig contains parameters for the ADK REST API server.
 type ServerConfig struct {
-	SessionService  session.Service
-	MemoryService   memory.Service
-	AgentLoader     agent.Loader
-	ArtifactService artifact.Service
-	SSEWriteTimeout time.Duration
-	PluginConfig    runner.PluginConfig
-	DebugConfig     DebugTelemetryConfig
+	SessionService            session.Service
+	MemoryService             memory.Service
+	AgentLoader               agent.Loader
+	ArtifactService           artifact.Service
+	SSEWriteTimeout           time.Duration
+	PluginConfig              runner.PluginConfig
+	DebugConfig               DebugTelemetryConfig
+	SaveInputBlobsAsArtifacts bool
 }
 
 // DebugTelemetryConfig contains parameters for the debug telemetry.
