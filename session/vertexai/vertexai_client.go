@@ -308,10 +308,20 @@ func (c *vertexAiClient) appendEvent(ctx context.Context, appName, sessionID str
 }
 
 // eventNeedsRawEvent reports whether the event carries state that has no
-// dedicated SessionEvent column and would be lost without raw_event.
+// lossless mapping to SessionEvent columns and would be lost without raw_event.
 // Gating raw_event on this keeps plain events on their legacy wire format,
 // so the recorded replay fixtures stay valid.
 func eventNeedsRawEvent(event *session.Event) bool {
+	// The column-based converter does not preserve FileData. Use raw_event
+	// for file references, including DisplayName, which the Vertex FileData
+	// protobuf cannot represent.
+	if event.Content != nil {
+		for _, part := range event.Content.Parts {
+			if part != nil && part.FileData != nil {
+				return true
+			}
+		}
+	}
 	return event.Output != nil ||
 		event.NodeInfo != nil ||
 		event.IsolationScope != "" ||
